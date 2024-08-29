@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Latest News</title>
+  <link rel="icon" href="https://tse2.mm.bing.net/th?id=OIP.SyWn6BMDk8Pa4UsBAkwuCgHaEO&pid=Api&P=0&h=180"
+    type="image" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+</head>
+
+<body>
+  <header class=" text-bg">
+    <div class="container" >
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <h1>Sky News</h1>
+       
+          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+            <use xlink:href=" "/>
+          </svg>
+        </a>
+
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <li><a href="/?query=everything&page=1" class="nav-link px-2 text-secondary">Home</a></li>
+          <li><a href="/?query=weather&page=1" class="nav-link px-2 text-black">Weather</a></li>
+          <li><a href="/?query=sports&page=1" class="nav-link px-2 text-black">Sport</a></li>
+          <li><a href="/?query=election&page=1" class="nav-link px-2 text-black">Election</a></li>
+          <li><a href="/?query=crime&page=1" class="nav-link px-2 text-black">Crime</a></li>
+        </ul>
+
+        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 d-flex" action="" role="search">
+          <input type="search" class="form-control form-control-dark text-bg-light" placeholder="Search..."  name="q" />
+          <input type="hidden" class="form-control form-control-dark text-bg-light" placeholder="Search..."  name="pageno" value="1"/>
+          <button type="submit" id="search" class="btn btn-warning bg-black text-white">
+            Search
+          </buttonx>
+        </form>
+
+        <div class="text-end">
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div id="content" class="row text-center"><p>Loading...</p></div>
+  </div>
+ 
+
+  <footer class="my-2 mx-4 d-flex justify-content-center">
+    <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
+      <div class="btn-group" role="group" aria-label="First group">
+        <a type="button" id="pre" class="btn btn-outline-secondary" href="">Previous</a>
+        <a type="button" id="next" class="btn btn-outline-secondary" href="">next</a>
+      </div>
+  </footer>
+  <script>
+    let query = window.location.search.split("?")[1].split("&")[0].split("=")[1];
+    let pageno = parseInt(window.location.search.split("?")[1].split("&")[1].split("=")[1]);
+    const news = async (query, pageno) => {
+      let a = await fetch(`https://newsapi.org/v2/everything?q=${query}&apiKey=87ee19d035104e04b211ae77fd9290d5&pageSize=12&page=${pageno}`);
+      let b = await a.json();
+      console.log(b);
+      pre.href = `/?query=${query}&page=${pageno - 1}`
+      next.href = `/?query=${query}&page=${pageno + 1}`
+      let str = ""
+      for (let item of b.articles) {
+         str = str + `
+          <div class="card m-2" style="width: 18rem">
+            <img src="${item.urlToImage}" class="card-img-top" alt="..." />
+            <div class="card-body">
+              <h5 class="card-title">${item.title}</h5>
+              <p class="card-text">${item.description}</p>
+              <a href="${item.url}" class="btn btn-primary">Read More</a>
+            </div>
+          </div>`
+        }
+        content.innerHTML = str;
+    }
+    news(query, pageno);
+    let  que = document.getElementById("query").value;
+    search.href = `/?query=${document.getElementById("query").value}&page=1`
+  </script>
+</body>
+
+</html>
